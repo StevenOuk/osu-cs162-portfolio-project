@@ -23,8 +23,6 @@ class GessGame:
         Sets the initial game state to "UNFINISHED".
         Sets the current player to "BLACK" as Black is the first player to move.
         Sets the initial board state to the given state in the GessGame Description.
-        I plan on keeping track of the number of rings separately in the Ring class, so I currently don't have
-        the rings set as a data member, but subject to change if need be.
         """
         self._game_state = "UNFINISHED"
         self._player = "BLACK"
@@ -164,6 +162,18 @@ class GessGame:
 
         # Remove first piece.
         self.remove_piece(center1)
+
+        # Check if the player has 0 rings after removing the footprint.
+        if self.get_player() == "BLACK":
+            if self.check_black_rings() is False:
+                self.add_piece(piece, center1)  # Adds back the removed piece if False.
+                print("Cannot destroy your own ring")
+                return False
+        if self.get_player() == "WHITE":
+            if self.check_white_rings() is False:
+                self.add_piece(piece, center1)  # Adds back the removed piece if False.
+                print("Cannot destroy your own ring")
+                return False
 
         # Check if path is clear.
         if self.is_path_clear(center1, center2, super) is False:
@@ -509,6 +519,8 @@ class GessGame:
 # game.make_move('i3', 'i13')
 # game.display_board()
 # game.make_move('i18', 'i15')
+# game.display_board()
+# game.make_move('l4', 'k4')
 # game.display_board()
 # print(game.get_game_state())
 
